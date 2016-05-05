@@ -22,23 +22,6 @@ test                      = require 'guy-test'
 Xmap                      = require './main'
 
 
-#===========================================================================================================
-# HELPERS
-#-----------------------------------------------------------------------------------------------------------
-show_keys_and_key_bfrs = ( keys, key_bfrs ) ->
-  f = ( p ) -> ( t for t in ( p.toString 'hex' ).split /(..)/ when t isnt '' ).join ' '
-  #.........................................................................................................
-  columnify_settings =
-    paddingChr: ' '
-  #.........................................................................................................
-  data      = []
-  key_bfrs  = ( f p for p in key_bfrs )
-  for key, idx in keys
-    key_txt = ( rpr key ).replace /\\u0000/g, '∇'
-    data.push { 'str': key_txt, 'bfr': key_bfrs[ idx ]}
-  help '\n' + CND.columnify data, columnify_settings
-  return null
-
 #-----------------------------------------------------------------------------------------------------------
 @[ "test 1" ] = ( T ) ->
   d = new Xmap()
@@ -58,9 +41,12 @@ show_keys_and_key_bfrs = ( keys, key_bfrs ) ->
   # help '0713', d.get [ 1234, ]
   # help '0713', d.get [ 'abcäöüz', null, true, ]
   # urge d.decode 'ETabcÃ¤Ã¶Ã¼z\u0000BD\u0000'
-  # help Array.from d.keys()
-  # help Array.from d.values()
-  # help Array.from d.entries()
+  # help JSON.stringify Array.from d.keys()
+  # help JSON.stringify Array.from d.values()
+  # help JSON.stringify Array.from d.entries()
+  T.eq ( Array.from d.keys()    ), [[1234],12.8,true,null,Infinity,["abcäöüz",null,true]]
+  T.eq ( Array.from d.values()  ), ["helo","helo 12.8","helo true","helo null","truly huge","oops"]
+  T.eq ( Array.from d.entries() ), [[[1234],"helo"],[12.8,"helo 12.8"],[true,"helo true"],[null,"helo null"],[Infinity,"truly huge"],[["abcäöüz",null,true],"oops"]]
   # help d.size
   # help d.size = 3
   # help d.size
@@ -78,9 +64,6 @@ demo = ->
   d.set null, 'helo null'
   d.set Infinity, "truly huge"
   d.set [ 'abcäöüz', null, true, ], 'oops'
-  help '0713', d.get [ 1234, ]
-  help '0713', d.get [ 'abcäöüz', null, true, ]
-  help '0713', d.get [ 'abcäöüz', null, true, ]
   urge d.decode 'ETabcÃ¤Ã¶Ã¼z\u0000BD\u0000'
   help Array.from d.keys()
   help Array.from d.values()
