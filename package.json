@@ -1,0 +1,27 @@
+{
+  "name": "xmap",
+  "version": "1.0.0",
+  "description": "A JavaScript Map type that compares keys by value, not identity",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "coffee -o lib -c src",
+    "test": "node lib/tests.js"
+  },
+  "keywords": [
+    "map"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loveencounterflow/xmap.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cnd": "^2.0.3",
+    "hollerith-codec": "^1.0.24"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "guy-test": "^1.1.2"
+  }
+}
